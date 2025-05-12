@@ -1,5 +1,10 @@
 public class FibonacciCalculator {
 
+    /**
+     * Returns the nth term in a Fibonacci sequence
+     * @param n the term that will be used for the sequence
+     * @return the value of the term after calculating the sequence
+     */
     public static int fibonacci(int n) {
         if (n <= 1) return n;
         else return fibonacci(n - 1) + fibonacci(n - 2);
