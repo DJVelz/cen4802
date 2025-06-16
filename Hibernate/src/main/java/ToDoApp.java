@@ -4,13 +4,16 @@
  */
 
 import entity.Item;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 
 import java.util.*;
 
 public class ToDoApp {
     public static void main(String[] args) {
+        SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
         Scanner sc = new Scanner(System.in);
-        Actions dao = new Actions();
+        Actions dao = new Actions(sessionFactory);
         boolean running = true;
 
         System.out.println("Welcome to your To-Do List.");
@@ -41,7 +44,7 @@ public class ToDoApp {
                 case "2":
                     System.out.print("Enter item description: ");
                     String desc = sc.nextLine();
-                    dao.addItem(new Item(desc));
+                    dao.addItem(new Item());
                     System.out.println("Added: " + desc);
                     break;
 
@@ -67,6 +70,5 @@ public class ToDoApp {
         }
 
         sc.close();
-        HibernateUtil.getSessionFactory().close();
     }
 }
