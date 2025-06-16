@@ -11,27 +11,35 @@ public class Actions {
 
     public void addItem(String description) {
         EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        em.persist(new Item(description));
-        em.getTransaction().commit();
-        em.close();
+        try {
+            em.getTransaction().begin();
+            em.persist(new Item(description));
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
     }
 
     public List<Item> getAllItems() {
         EntityManager em = emf.createEntityManager();
-        List<Item> items = em.createQuery("SELECT i FROM Item i", Item.class).getResultList();
-        em.close();
-        return items;
+        try {
+            return em.createQuery("SELECT i FROM Item i", Item.class).getResultList();
+        } finally {
+            em.close();
+        }
     }
 
     public void deleteItem(int id) {
         EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        Item item = em.find(Item.class, id);
-        if (item != null) {
-            em.remove(item);
+        try {
+            em.getTransaction().begin();
+            Item item = em.find(Item.class, id);
+            if (item != null) {
+                em.remove(item);
+            }
+            em.getTransaction().commit();
+        } finally {
+            em.close();
         }
-        em.getTransaction().commit();
-        em.close();
     }
 }
