@@ -1,12 +1,6 @@
-/*
- * The ToDoApp uses the methods from ToDoList in a menu to allow the user to
- * create and manage their own to-do list
- */
-
 import entity.Item;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
-
 
 import java.util.*;
 
@@ -50,7 +44,7 @@ public class ToDoApp {
                     try {
                         int id = Integer.parseInt(sc.nextLine());
                         actions.deleteItem(id);
-                        System.out.println("Deleted if found.");
+                        System.out.println("Deleted.");
                     } catch (NumberFormatException e) {
                         System.out.println("Invalid number.");
                     }
