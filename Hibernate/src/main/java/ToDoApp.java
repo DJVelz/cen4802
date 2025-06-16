@@ -30,9 +30,9 @@ public class ToDoApp {
 
             switch (choice) {
                 case "1" -> {
-                    var items = actions.getAllItems();
+                    List<Item> items = actions.getAllItems();
                     if (items.isEmpty()) {
-                        System.out.println("List is empty.");
+                        System.out.println("Your list is empty.");
                     } else {
                         for (Item item : items) {
                             System.out.println(item.getId() + ". " + item.getDescription());
@@ -40,17 +40,17 @@ public class ToDoApp {
                     }
                 }
                 case "2" -> {
-                    System.out.print("Enter item: ");
-                    String desc = sc.nextLine();
-                    actions.addItem(desc);
-                    System.out.println("Item added.");
+                    System.out.print("Enter new item: ");
+                    String description = sc.nextLine();
+                    actions.addItem(description);
+                    System.out.println("Added.");
                 }
                 case "3" -> {
                     System.out.print("Enter ID to delete: ");
                     try {
                         int id = Integer.parseInt(sc.nextLine());
                         actions.deleteItem(id);
-                        System.out.println("Item deleted (if it existed).");
+                        System.out.println("Deleted if found.");
                     } catch (NumberFormatException e) {
                         System.out.println("Invalid number.");
                     }
