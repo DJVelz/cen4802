@@ -12,7 +12,7 @@ import java.util.*;
 
 public class ToDoApp {
     public static void main(String[] args) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("todoPU");
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
         Scanner sc = new Scanner(System.in);
         Actions actions = new Actions(emf);
         boolean running = true;
