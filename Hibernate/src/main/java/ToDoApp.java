@@ -4,16 +4,17 @@
  */
 
 import entity.Item;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+
 
 import java.util.*;
 
 public class ToDoApp {
     public static void main(String[] args) {
-        SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("todoPU");
         Scanner sc = new Scanner(System.in);
-        Actions dao = new Actions(sessionFactory);
+        Actions actions = new Actions(emf);
         boolean running = true;
 
         System.out.println("Welcome to your To-Do List.");
@@ -22,53 +23,46 @@ public class ToDoApp {
             System.out.println("\nHere are your options: ");
             System.out.println("1. View to-do list");
             System.out.println("2. Add a new item to the list");
-            System.out.println("3. Delete an item from the list");
+            System.out.println("3. Delete item by ID");
             System.out.println("4. Exit");
-
-            System.out.println("\nWhat would you like to do? ");
+            System.out.print("Your choice: ");
             String choice = sc.nextLine();
 
             switch (choice) {
-                case "1":
-                    List<Item> items = dao.getAllItems();
+                case "1" -> {
+                    var items = actions.getAllItems();
                     if (items.isEmpty()) {
-                        System.out.println("Your to-do list is empty.");
+                        System.out.println("List is empty.");
                     } else {
-                        System.out.println("To-Do List:");
                         for (Item item : items) {
                             System.out.println(item.getId() + ". " + item.getDescription());
                         }
                     }
-                    break;
-
-                case "2":
-                    System.out.print("Enter item description: ");
+                }
+                case "2" -> {
+                    System.out.print("Enter item: ");
                     String desc = sc.nextLine();
-                    dao.addItem(new Item());
-                    System.out.println("Added: " + desc);
-                    break;
-
-                case "3":
+                    actions.addItem(desc);
+                    System.out.println("Item added.");
+                }
+                case "3" -> {
                     System.out.print("Enter ID to delete: ");
                     try {
                         int id = Integer.parseInt(sc.nextLine());
-                        dao.deleteItem(id);
-                        System.out.println("Deleted item with ID: " + id);
+                        actions.deleteItem(id);
+                        System.out.println("Item deleted (if it existed).");
                     } catch (NumberFormatException e) {
-                        System.out.println("Invalid ID input.");
+                        System.out.println("Invalid number.");
                     }
-                    break;
-
-                case "4":
-                    running = false;
+                }
+                case "4" -> {
+                    emf.close();
+                    sc.close();
                     System.out.println("Goodbye!");
-                    break;
-
-                default:
-                    System.out.println("Invalid option.");
+                    return;
+                }
+                default -> System.out.println("Invalid choice.");
             }
         }
-
-        sc.close();
     }
 }

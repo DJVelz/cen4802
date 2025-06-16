@@ -15,7 +15,9 @@ public class Item {
     @Column(name = "Description", nullable = false, length = 45)
     private String description;
 
-    public void ToDoItem(String description) {
+    public Item() {}
+
+    public Item(String description) {
         this.description = description;
     }
 

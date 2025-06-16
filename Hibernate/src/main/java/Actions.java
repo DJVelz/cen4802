@@ -1,38 +1,37 @@
 import entity.Item;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import jakarta.persistence.*;
 import java.util.List;
 
 public class Actions {
-    private final SessionFactory sessionFactory;
+    private EntityManagerFactory emf;
 
-    public Actions(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    public Actions(EntityManagerFactory emf) {
+        this.emf = emf;
     }
 
-    public void addItem(Item item) {
-        try (Session session = sessionFactory.openSession()) {
-            Transaction tx = session.beginTransaction();
-            session.persist(item);
-            tx.commit();
-        }
+    public void addItem(String description) {
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        em.persist(new Item(description));
+        em.getTransaction().commit();
+        em.close();
     }
 
     public List<Item> getAllItems() {
-        try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("FROM Item", Item.class).list();
-        }
+        EntityManager em = emf.createEntityManager();
+        List<Item> items = em.createQuery("SELECT i FROM Item i", Item.class).getResultList();
+        em.close();
+        return items;
     }
 
     public void deleteItem(int id) {
-        try (Session session = sessionFactory.openSession()) {
-            Transaction tx = session.beginTransaction();
-            Item item = session.get(Item.class, id);
-            if (item != null) {
-                session.remove(item);
-            }
-            tx.commit();
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        Item item = em.find(Item.class, id);
+        if (item != null) {
+            em.remove(item);
         }
+        em.getTransaction().commit();
+        em.close();
     }
 }
