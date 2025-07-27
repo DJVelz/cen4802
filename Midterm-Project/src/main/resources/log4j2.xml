@@ -1,3 +1,4 @@
+
 <Configuration status="info">
     <Properties>
         <Property name="layout">%d [%t} %-5level %logger - %m%n</Property>
@@ -13,7 +14,7 @@
         </File>
     </Appenders>
     <Loggers>
-        <Logger name="vehicles" level="info" additivity="false" >
+        <Logger name="calculate" level="info" additivity="false" >
             <AppenderRef ref="LogFile" />
             <AppenderRef ref="Console" />
         </Logger>

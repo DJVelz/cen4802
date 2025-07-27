@@ -1,28 +1,38 @@
 import org.apache.logging.log4j.*;
-import java.util.logging.Logger;
+
+import java.util.Random;
 
 public class Main {
-    private static final Logger logger = LogManager.getLogger(Main.class);
+    private static final Logger logger = LogManager.getLogger("calculate");
 
     public static void main(String[] args) {
         Calculator calc = new Calculator();
+        Random random = new Random();
 
-        try {
-            int result = calc.add(2, 3);
-            logger.info("Operation=ADD, Inputs=2,3, Result={}", result);
-        } catch (Exception e) {
-            logger.error("ADD operation failed", e);
+        for (int i = 0; i < 100; i++) {
+            int a = random.nextInt(10);
+            int b = random.nextInt(10);
+            int operation = random.nextInt(3);
+
+            try {
+                int result = 0;
+                switch (operation) {
+                    case 0:
+                        result = calc.add(a, b);
+                        logger.info("Operation=ADD, Inputs=" + a + "," + b + ", Result=" + result);
+                        break;
+                    case 1:
+                        result = calc.subtract(a, b);
+                        logger.info("Operation=SUBTRACT, Inputs=" + a + "," + b + ", Result=" + result);
+                        break;
+                    case 2:
+                        result = calc.divide(a, b);
+                        logger.info("Operation=DIVIDE, Inputs=" + a + "," + b + ", Result=" + result);
+                        break;
+                }
+            } catch (Exception e) {
+                logger.error(e.getMessage());
+            }
         }
-
-        try {
-            int result = calc.divide(10, 0);
-            logger.info("Operation=DIVIDE, Inputs=10,0, Result={}", result);
-        } catch (Exception e) {
-            logger.error("DIVIDE operation failed", e);
-        }
-
-        System.out.println("2 + 3 = " + calc.add(2, 3));
-        System.out.println("4 - 1 = " + calc.subtract(4, 1));
-        System.out.println("10 / 2 = " + calc.divide(10, 2));
     }
 }
